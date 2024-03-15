@@ -282,11 +282,12 @@ class ChromiumOptions(object):
         self._prefs = {}
         return self
 
-    def set_timeouts(self, base=None, page_load=None, script=None, implicit=None):
+    def set_timeouts(self, base=None, page_load=None, script=None, implicit=None,extra_wait=0):
         """设置超时时间，单位为秒
         :param base: 默认超时时间
         :param page_load: 页面加载超时时间
         :param script: 脚本运行超时时间
+        :param extra_wait: 页面额外等待时间 目前没有很好的策略判定页面dom以及js是否完成元素完成,这个值决定每次调用new_tab以及get后是否额外等待,粗糙了点
         :return: 当前对象
         """
         base = base if base is not None else implicit
@@ -296,7 +297,8 @@ class ChromiumOptions(object):
             self._timeouts['page_load'] = page_load
         if script is not None:
             self._timeouts['script'] = script
-
+        if extra_wait is not None:
+            self._timeouts['extra_wait'] = extra_wait
         return self
 
     def set_user(self, user='Default'):

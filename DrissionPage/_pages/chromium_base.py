@@ -11,6 +11,7 @@ from pathlib import Path
 from re import findall
 from threading import Thread
 from time import perf_counter, sleep
+import time
 
 from DataRecorder.tools import make_valid_name
 
@@ -470,6 +471,9 @@ class ChromiumBase(BasePage):
         retry, interval, is_file = self._before_connect(url, retry, interval)
         self._url_available = self._d_connect(self._url, times=retry, interval=interval,
                                               show_errmsg=show_errmsg, timeout=timeout)
+                                              
+        if 'extra_wait' in self.timeouts and self.timeouts['extra_wait']>0:
+            time.sleep(self.timeouts['extra_wait'])
         return self._url_available
 
     def cookies(self, as_dict=False, all_domains=False, all_info=False):
